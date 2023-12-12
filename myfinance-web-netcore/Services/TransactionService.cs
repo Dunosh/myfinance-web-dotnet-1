@@ -6,49 +6,49 @@ using myfinance_web_netcore.Models;
 
 namespace myfinance_web_netcore.Services
 {
-    public class AccountPlanServices : IAccountPlanService
+    public class TransactionService : ITransactionService
     {
         private readonly MyFinanceDbContext _myFinanceDbContext;
         private readonly IMapper _mapper;
 
-        public AccountPlanServices(MyFinanceDbContext myFinanceDbContext,
+        public TransactionService(MyFinanceDbContext myFinanceDbContext,
                                  IMapper mapper)
         {
             _myFinanceDbContext = myFinanceDbContext;
             _mapper = mapper;
         }
 
-        public IEnumerable<AccountPlanModel> Listar()
+        public IEnumerable<TransactionModel> Listar()
         {
-            var list = _myFinanceDbContext.AccountPlan.ToList();
-            var lista = _mapper.Map<IEnumerable<AccountPlanModel>>(list);
+            var list = _myFinanceDbContext.Transaction.ToList();
+            var lista = _mapper.Map<IEnumerable<TransactionModel>>(list);
             return lista;
         }
 
-        public AccountPlanModel RetornarRegistro(int id)
+        public TransactionModel RetornarRegistro(int id)
         {
-            var item = _myFinanceDbContext.AccountPlan.Where(item => item.Id == id).First();
-            return _mapper.Map<AccountPlanModel>(item);
+            var item = _myFinanceDbContext.Transaction.Where(item => item.Id == id).First();
+            return _mapper.Map<TransactionModel>(item);
         }
 
-        void IAccountPlanService.Salvar(AccountPlanModel model)
+        void ITransactionService.Salvar(TransactionModel model)
         {
-            var item = _mapper.Map<AccountPlan>(model);
+            var item = _mapper.Map<Transaction>(model);
             if (item.Id == null)
             {
-                _myFinanceDbContext.AccountPlan.Add(item);
+                _myFinanceDbContext.Transaction.Add(item);
             }
             else
             {
-                _myFinanceDbContext.AccountPlan.Attach(item);
+                _myFinanceDbContext.Transaction.Attach(item);
                 _myFinanceDbContext.Entry(item).State = EntityState.Modified;
             }
             _myFinanceDbContext.SaveChanges();
         }
 
-        void IAccountPlanService.Excluir(int id)
+        void ITransactionService.Excluir(int id)
         {
-            var item = _myFinanceDbContext.AccountPlan.Where(item => item.Id == id).First();
+            var item = _myFinanceDbContext.Transaction.Where(item => item.Id == id).First();
             _myFinanceDbContext.Remove(item);
             _myFinanceDbContext.SaveChanges();
         }
